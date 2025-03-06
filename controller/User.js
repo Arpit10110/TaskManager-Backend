@@ -1,5 +1,8 @@
 import supabase from "../db/connectdb.js";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+
+
 
 export const createuser =async(req,res)=>{
        try {
@@ -44,7 +47,7 @@ export const createuser =async(req,res)=>{
 
 export const login =async(req,res)=>{
        try {
-
+       
         const {email,password} = await req.body;
 
         const user_exit = await supabase.from("UserList").select('*').eq("email",email)
@@ -57,10 +60,22 @@ export const login =async(req,res)=>{
         }
         const match = await bcrypt.compare(password,user_exit.data[0].password)
         if(match){
+
+            const token = jwt.sign({email:email},process.env.JWT_SECRET,{expiresIn:"10d"}) 
+
+
+          res.cookie("token",token,{
+                maxAge:10 * 24 * 60 * 60 * 1000,
+                httpOnly:true,
+            })
+
             return res.json({
                 success: true,
-                data:user_exit.data[0]
+                data:user_exit.data[0],
+                token:token
             })
+
+
         }else{
             return res.json({
                 success: false,
@@ -74,4 +89,11 @@ export const login =async(req,res)=>{
             error:"error"
         })
        }
+}
+
+export const signout = (req,res)=>{
+    return res.cookie("token","",{expires:new Date(Date.now())}).json({
+        success: true,
+        message:"user logout successfully "
+    })
 }
