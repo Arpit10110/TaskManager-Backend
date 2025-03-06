@@ -4,9 +4,9 @@ export const createtask =async(req,res)=>{
     try {
 
      const {title, desc, duedate, status, } = await req.body;
-     const user_email = await req.email;
+     const {email} = await req.email;
+     const user_email=email
      const taskdata={ title, desc, duedate, status, user_email}
-
      const {data,error} = await supabase.from("TaskList").insert([taskdata]).single();
 
          return res.json({
