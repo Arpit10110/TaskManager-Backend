@@ -6,7 +6,7 @@ import cors from "cors"
 config()
 const app = express()
 app.use(cors({
-    origin: "http://localhost:5173", // Your frontend URL
+    origin: process.env.Frontend_url, // Your frontend URL
     credentials: true // Allow cookies to be sent
 }));
 app.use(express.json());
