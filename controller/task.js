@@ -3,7 +3,8 @@ import supabase from "../db/connectdb.js";
 export const createtask =async(req,res)=>{
     try {
 
-     const {title, desc, duedate, status, user_email} = await req.body;
+     const {title, desc, duedate, status, } = await req.body;
+     const user_email = await req.email;
      const taskdata={ title, desc, duedate, status, user_email}
 
      const {data,error} = await supabase.from("TaskList").insert([taskdata]).single();

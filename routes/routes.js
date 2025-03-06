@@ -17,7 +17,7 @@ router.post("/signup",createuser)
 router.post("/login",login)
 router.get("/signout",signout)
 //tasks routes
-router.post("/createtask",createtask)
+router.post("/createtask",getuser,createtask)
 router.delete("/deltask",deltask)
 router.put("/changestatus",changestatus)
 router.get("/gettask",getuser,gettask)
